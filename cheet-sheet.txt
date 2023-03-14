@@ -1,0 +1,147 @@
+### enviroment yaratish: python -m venv env
+
+### Windows
+### 1. env ni activate qilishdan oldin (powershell yoki cmd da run admin) 
+### buni yozish kk run admin qilib powershellda: Set-ExecutionPolicy Unrestricted -Force
+### 2. env\Scripts\activate
+
+### Django urnatish
+### 1. pip install Django==4.1.5
+
+### requirements.txt -> bu bizni ishlatgan kutubxona yoki frameworklar versiyalarini saqlovchi file
+### pip freeze > requirements.txt       => sqlash
+### pip freeze -r requirements.txt      => o'rnatish
+
+### Django project yaratishni boshlaymiz
+### django-admin startproject config    //bu comanda proyekt sozlamarini yaratadi ichma ich config papka
+### django-admin startproject config .  //bu comanda proyekt sozlamarini yaratadi bitta config papkada
+
+### python manage.py migrate        // bu comanda malumot saqlash un (database, sqlite3) ni faollashtiradi
+
+### python manage.py runserver      // bu comanda django loyihamizni ishga tushiradi
+
+### python manage.py createsuperuser     // bu comanda django loyihamizda superuser 
+
+
+### python manage.py startup app_name
+### django-admin startapp app_name
+
+### INSTALLED_APPS = [
+###     # local apps
+###    'myapp.apps.MyappConfig',
+### ]
+
+### myapp ni ichidagi admin ni ichiga shuni yoziladi. unregister qilish un
+    from django.contrib.auth.models import User, Group
+    admin.site.unregister([Group])
+
+
+### jazzmin ni qoshish   -> admin dashboard ko'rinishini uzgartirish un
+    pip install django-jazzmin      # jazzmin ni qoshish
+    pip freeze > requirements.txt   # jazzmin ni requirements ga qoshib quyish
+
+### jazzmin ni INSTALLED_APPS ga qo'shish kk boshiga 'django.contrib.admin' dan avval
+    INSTALLED_APPS = [
+        'jazzmin',
+
+        'django.contrib.admin',
+        [...]
+    ]
+
+### settings ga kirib time zona ni almashtirish 
+    TIME_ZONE = 'Asia/Tashkent'
+
+### Model bu proyektimizni skleti
+
+### MVT bu template bn ishlash. Template bu html fayllar
+### MVT o'zi nima?  M odels V iews T emplates 
+
+### myapp.modelsni ichiga yangi model yaratamiz
+    class Mymodel(models.Model):
+        name = models.CharField(max_length=255)
+
+### adminga registratsiya qilish 
+    from myapp.models import Mymodel # tepaga import qilish
+   
+    admin.site.register([Mymodel])   # register qilish
+
+### Meta
+        class Meta: # model classni ichida yoziladi
+                verbose_name = 'My Model'
+                verbose_name_plural = 'My Model'
+    
+
+### 1. python manage.py makemigrations  -> migrations yaratib beradi. Biror model ni nomi yoki table si (fildi) qushilganda migrate qilinadi
+### migration - bu database tiliga o'girib beradi
+
+### 2. python manage.py migrate  -> database ga saqlab quyadi. Biror model ni nomi yoki table si (fildi) qushilganda migrate qilinadi
+
+### null=True  -> bu database ga null bolishi uchun ruxsat beradi.
+### blank=True  -> bu field yoki label uchun hech narsa kiritmaslikka ruxsat beradi.
+
+
+### views ni ichidagi
+    from django.http import HttpResponse
+
+    def hello_world(request):
+    return HttpResponse('Salom Dunyo!')
+
+### settings.urls ni ichiga
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('myapp.urls'))
+    ]
+
+### myapp da urls.py ochamiz va ichiga bularni yozamiz
+    from django.urls import path
+    from myapp.views import hello_world
+
+    urlpatterns = [
+    path('', hello_world)
+    ]
+
+### python manage.py runserver
+
+
+### Template bn ishlash
+1. myapp ni ichiga templates papka ochamiz
+2. views ni ichida quyidagini yozamiz
+    def all_product(request):
+    return render(request, 'all_product.html')
+3. myapp ni ichidagi urls ni uzgartirib quyamiz all_productni chaqirib 
+4. html fayl ochamiz templates ni ichiga
+
+5. model malumotlarini html ga junatish
+    from myapp.models import Dastavka
+
+    def all_product(request):
+        products = Dastavka.objects.all()
+        context={
+            'products':products
+        }
+        return render(request, 'all_product.html', context)
+
+### jadvalda chiqayapgan malumotlarni tartibini uzgartirish 
+    products = Dastavka.objects.all().order_by('-id')
+
+
+### Git / Github
+
+### gitignore.io ga kirib python django un tayyor gitignore yozuvlarini copy qilib
+### .gitignore faylga tashlash kk
+
+### 1. git init
+### 2. git add .  # agar git add . da sikl bo'lib qolsa buni yozing-> git config --global core.autocrlf false
+### 3. git commit -m 'first commit'
+### 4. git remote add origin https://.... 
+### 5. git push origin master
+
+
+
+
+
+
+
+
